@@ -37,7 +37,11 @@ sub = sample(nrow(mydata), floor(nrow(mydata) * 0.8)) #Defining indexs
 training <- mydata[sub, ] #Creating 
 testing <- mydata[-sub, ]
 
-tree = rpart(mIngreso ~ ., dat = training, method = "class", control = rpart.control(minsplit = 10, cp = 0.01, maxdepth = 5))
+tree = rpart(mIngreso ~ ., dat = training, method = "class", control = rpart.control(minsplit = 5, cp = 0.005, maxdepth = 6))
 fancyRpartPlot(tree)
 
 table(predict(tree, newdata = testing,type = "class"), testing$mIngreso)
+
+ptree = prune(tree, cp = tree$cptable[which.min(tree$cptable[,"xerror"]), "CP"])
+fancyRpartPlot(ptree)
+table(predict(ptree, newdata = testing,type = "class"), testing$mIngreso)
