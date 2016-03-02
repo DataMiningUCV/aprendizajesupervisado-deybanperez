@@ -63,4 +63,13 @@ tree = rpart(mIngreso ~ ., dat = training, method = "class", control = rpart.con
 fancyRpartPlot(tree)
 
 table(predict(tree, newdata = testing,type = "class"), testing$mIngreso)
-table()
+
+
+tree = rpart(mIngreso ~ ., dat = training, method = "class", control = rpart.control(minsplit = 5, cp = 0.005, maxdepth = 6))
+fancyRpartPlot(tree)
+
+table(predict(tree, newdata = testing,type = "class"), testing$mIngreso)
+
+ptree = prune(tree, cp = tree$cptable[which.min(tree$cptable[,"xerror"]), "CP"])
+fancyRpartPlot(ptree)
+table(predict(ptree, newdata = testing,type = "class"), testing$mIngreso)
