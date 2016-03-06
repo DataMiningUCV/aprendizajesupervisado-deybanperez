@@ -1,0 +1,119 @@
+---
+title: "Becas Crema 2.0"
+author: "Deyban Pérez"
+date: "March 5, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Abstract
+
+En la asignación anterior la compañía **Becas Crema** tomó los datos dados por **Control de Estudios** referentes a las renovaciones de beca con la meta de crear una vista minable. El objetivo fue completado y en esta oportunidad nos dispondremos a aplicar algunos algortimos para estimar el **modo de ingreso** de un estudiante que renueva la beca dada sus características.
+
+## Actividades realizadas
+
+1. Se cargó la vista minable creada en la asignación anterior **minable.csv**.
+```{r Loading Data}
+mydata = read.csv("minable.csv")
+```
+2. El siguiente paso fue el de selección de características, donde gracias al gran trabajo realizado previamente, todos los tipos de datos fueron categorizados y numerizados en caso de ser posible lo que nos permitió una fácil manipulación de las variables. Así mismo, se removieron aquellas columnas de tipo string y la fila cuyo individuo poseía un **modo de ingreso** tipo 1 (Convenios Nacionales o Internacionales), ya que sólo había una ocurrencia que no aportaba información.
+```{r Removing features}
+mydata[,"cIdentidad"] = NULL
+mydata[,"fNacimiento"] = NULL
+mydata[,"jReprobadas"] = NULL
+mydata[,"pReside"] = NULL
+mydata[,"cDireccion"] = NULL
+mydata[,"dHabitacion"] = NULL
+mydata[,"oSolicitudes"] = NULL
+mydata[,"aEconomica"] = NULL
+mydata[,"rating"] = NULL
+mydata[,"sugerencias"] = NULL
+mydata[,"grOdontologicos"] = NULL
+mydata = mydata[-1,] #Deleting outlier
+
+```
+3. Al hacer un análisis de los datos se pueden ver como las clases están desbalanceadas:
+```{r Visualizing ocurrences by class}
+sum(mydata[,"mIngreso"] == 0)
+sum(mydata[,"mIngreso"] == 2)
+sum(mydata[,"mIngreso"] == 3)
+
+```
+En la clase cero (0, OPSU) existen 71 ocurrencias, en la clase dos (2, Convenios) existen 8 ocurrencias y en la clase tres (3, Prueba Interna) existen 110 ocurrencias, dando un total de ciento noventa individuos (190). Dicho esto podemos apreciar el hecho de que las proporciones no están balanceadas. Dada esta situación previamente planteada la estrategia a adoptar fue la de hacer un **muestreo estratificado** a la hora de dividir el conjunto de datos total en los conjuntos de datos para **entrenamiento** (training) y **prueba** (testing). Para eso se tómo la probabilidad condicional de que un individuo sea elegido dado que ya se sabe que pertenece a la clase, cómo se muestra a continuación:
+```{r Claculating probabilities for stratified sampling}
+prob_0 = 1/sum(mydata[,"mIngreso"] == 0);
+prob_2 = 1/sum(mydata[,"mIngreso"] == 2);
+prob_3 = 1/sum(mydata[,"mIngreso"] == 3);
+```
+4. Hacer la separación del **testing** y el **training**, dejando un ochenta porciento (80 %) de los datos para el **training** y el restante para el **testing**:
+```{r}
+################################################
+#Calculating probabilities for each element into dataset
+prob_0 = 1/sum(mydata[,"mIngreso"] == 0);
+prob_2 = 1/sum(mydata[,"mIngreso"] == 2);
+prob_3 = 1/sum(mydata[,"mIngreso"] == 3);
+###################################################
+#Allocating space for vector of probabilities
+probabilities = seq(1,nrow(mydata),1)
+####################################################
+aux0 = 0 #Constant for numebr 0
+aux2 = 2 #Constant for number 2
+aux3= 3 #Constant for number 3
+######################################################
+#Filling probabilities for each position in data set 
+for (i in nrow(mydata))
+{
+  aux = mydata$mIngreso[i]
+
+  if(aux0 == aux)
+  {
+    probabilities[i] = prob_0
+  
+  }else if(aux2 == aux)
+  {
+    probabilities[i] = prob_2
+  
+  }else if(aux3 == aux)
+  {
+    probabilities[i] = prob_3
+  }
+  
+}
+########################################################
+#Splitting data into training and testing sets
+set.seed(777)
+sub = sample(nrow(mydata), floor(nrow(mydata) * 0.8), prob = probabilities, replace = F)
+training <- mydata[sub, ]
+testing <- mydata[-sub, ]
+######################################################
+```
+
+Las proporciones quedaron de la siguiente manera para el **training**:
+
+```{r}
+sum(training[,"mIngreso"] == 0)
+sum(training[,"mIngreso"] == 2)
+sum(training[,"mIngreso"] == 3)
+
+```
+Y de la siguiente manera para el **testing**:
+
+```{r}
+sum(testing[,"mIngreso"] == 0)
+sum(testing[,"mIngreso"] == 2)
+sum(testing[,"mIngreso"] == 3)
+```
+Se puede apreciar como las proporciones se siguen manteniendo luego de la separación de los datos.
+
+5.
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

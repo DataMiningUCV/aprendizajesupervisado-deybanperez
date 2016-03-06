@@ -1,6 +1,7 @@
 # Begin
 # Installing dependecies in Linux: 
-# sudo apt-get install libgtk2.0-dev, necessary for fancyplot
+  # sudo apt-get install libgtk2.0-dev, necessary for fancyplot
+  #apt-get install r-cran-rjava
 
 #Functions definitions
 ##########################################
@@ -93,7 +94,6 @@ for (i in nrow(mydata))
   {
     probabilities[i] = prob_3
   }
-  
 }
 ########################################################
 #Splitting data into training and testing sets
@@ -102,10 +102,15 @@ sub = sample(nrow(mydata), floor(nrow(mydata) * 0.8), prob = probabilities, repl
 training <- mydata[sub, ]
 testing <- mydata[-sub, ]
 ######################################################
-#Visializing proportions
+#Visializing proportions for training
 sum(training[,"mIngreso"] == 0)
 sum(training[,"mIngreso"] == 2)
 sum(training[,"mIngreso"] == 3)
+#And testing
+#Visializing proportions for training
+sum(testing[,"mIngreso"] == 0)
+sum(testing[,"mIngreso"] == 2)
+sum(testing[,"mIngreso"] == 3)
 #######################################################
 #Creating decission tree model to predict m Ingreso
 tree = rpart(mIngreso ~ ., dat = training, method = "class", control = rpart.control(minsplit = 10, cp = 0.001, maxdepth = 3))
