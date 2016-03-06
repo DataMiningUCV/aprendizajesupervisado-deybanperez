@@ -1,10 +1,10 @@
 # Begin
 # Installing dependecies in Linux: 
   # sudo apt-get install libgtk2.0-dev, necessary for fancyplot
+  #apt-get install r-cran-rjava
 
 #Functions definitions
 ##########################################
-#Funcion para instalar paquetes si no se tienen
 install = function(pkg)
 {
   # Si ya está instalado, no lo instala.
@@ -15,15 +15,13 @@ install = function(pkg)
 }
 
 ###########################################
-#Funcion para normalizar una columna de un data frame
 normalize = function(x)
 {
   num <- x - min(x)
   denom <- max(x) - min(x)
   return (num/denom)
 }
-
-########################################
+#########################################
 #Packages needed
 install("RGtk2")
 install("MicroStrategyR")
@@ -33,7 +31,6 @@ install("rattle")
 install("rpart.plot")
 install("RColorBrewer")
 install("FactoMineR")
-install("class")
 ########################################
 #Importing libraries
 library("rpart")
@@ -42,8 +39,8 @@ library("rattle")
 library("rpart.plot")
 library("RColorBrewer")
 library("FactoMineR")
-library("class")
 ##########################################
+
 #Loading the data
 mydata = read.csv("minable.csv")
 ##################################################
@@ -61,6 +58,7 @@ mydata[,"sugerencias"] = NULL
 mydata[,"grOdontologicos"] = NULL
 mydata = mydata[-1,] #Deleting outlier
 ################################################
+
 #Calculating probabilities for each element into dataset
 prob_0 = 1/sum(mydata[,"mIngreso"] == 0);
 prob_2 = 1/sum(mydata[,"mIngreso"] == 2);
@@ -69,6 +67,7 @@ prob_3 = 1/sum(mydata[,"mIngreso"] == 3);
 #Allocating space for vector of probabilities
 probabilities = seq(1,nrow(mydata),1)
 ####################################################
+
 aux0 = 0 #Constant for numebr 0
 aux2 = 2 #Constant for number 2
 aux3= 3 #Constant for number 3
@@ -77,15 +76,15 @@ aux3= 3 #Constant for number 3
 for (i in nrow(mydata))
 {
   aux = mydata$mIngreso[i]
-
+  
   if(aux0 == aux)
   {
     probabilities[i] = prob_0
-  
+    
   }else if(aux2 == aux)
   {
     probabilities[i] = prob_2
-  
+    
   }else if(aux3 == aux)
   {
     probabilities[i] = prob_3
@@ -103,25 +102,23 @@ sum(training[,"mIngreso"] == 0)
 sum(training[,"mIngreso"] == 2)
 sum(training[,"mIngreso"] == 3)
 #######################################################
-#Creating decission tree model to predict m Ingreso
-tree = rpart(mIngreso ~ ., dat = training, method = "class", control = rpart.control(minsplit = 10, cp = 0.001, maxdepth = 3))
-#Plotting model
-fancyRpartPlot(tree)
+training$mIngreso = as.factor(training$mIngreso)
+testing$mIngreso = as.factor(testing$mIngreso)
+rules = JRip(formula = mIngreso ~ ., data = training)
 #######################################################################
-#Creating confusion matrix tree
-confusionMatrixTree = table(testing$mIngreso, predict(tree, newdata = testing,type = "class"))
+#Creating confusion matrix
+confusionMatrixClasification = table(testing$mIngreso, predict(rules, newdata = testing,type = "class"))
 #Visualizing Confusion matriz
-confusionMatrixTree
+confusionMatrixClasification
 ##################################################################
-#Calculating hit rate tree
-hitRateTree = ((confusionMatrixTree[1,1] + confusionMatrixTree[2,2] + confusionMatrixTree[3,3]) / nrow(testing)) *100
-#Visualizing hit rate tree
-hitRateTree
+#Calculating hit rate
+hitRateClasification = ((confusionMatrixClasification[1,1] + confusionMatrixClasification[2,2] + confusionMatrixClasification[3,3]) / nrow(testing)) *100
+#Visualizing hit rate
+hitRateClasification
 ####################################################################
-#Calculating error rating tree
-errorRateTree = 100 - hitRateTree
+#Calculating error rating
+errorRateClasification = 100 - hitRateClasification
 #Visualizing error rate
-errorRateTree
-#################################################################
-
+errorRateClasification
+#################################################################}
 #END

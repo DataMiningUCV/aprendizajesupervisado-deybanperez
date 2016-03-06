@@ -94,11 +94,9 @@ for (i in nrow(mydata))
   
 }
 
-######################################################################
-#Normalization of features
-mydata_norm = as.data.frame(lapply(mydata[1:ncol(mydata)], normalize))
 #######################################################################
 #Splitting data into training and testing sets
+set.seed(777)
 sub = sample(nrow(mydata), floor(nrow(mydata) * 0.8), prob = probabilities, replace = F)
 training <- mydata[sub, ]
 testing <- mydata[-sub, ]
@@ -115,30 +113,26 @@ testingLabels = testing$mIngreso
 #Deleting rows to be predicted
 training[,"mIngreso"] = NULL
 testing[,"mIngreso"] = NULL
-###################################################
+############################################################################
 #Normalizing training and testing sets
 training_norm = as.data.frame(lapply(training[1:ncol(training)], normalize))
 testing_norm = as.data.frame(lapply(testing[1:ncol(testing)], normalize))
-##################################################
-#Visualizing Principal Components
-result = PCA(training_norm)
-#######################################################
+############################################################################
 mydata_pred <- knn(train = training_norm, test = testing_norm, cl = trainingLabels, k=14)
-
 #######################################################################
 #Creating confusion matrix
-confusionMatrix = table(testingLabels, mydata_pred)
+confusionMatrixK = table(testingLabels, mydata_pred)
 #Visualizing Confusion matriz
-confusionMatrix
+confusionMatrixK
 ##################################################################
 #Calculating hit rate
-hitRate = ((confusionMatrix[1,1] + confusionMatrix[2,2] + confusionMatrix[3,3]) / nrow(testing)) *100
+hitRateK = ((confusionMatrixK[1,1] + confusionMatrixK[2,2] + confusionMatrixK[3,3]) / nrow(testing)) *100
 #Visualizing hit rate
-hitRate
+hitRateK
 ####################################################################
 #Calculating error rating
-errorRate = 100 - hitRate
+errorRateK = 100 - hitRateK
 #Visualizing error rate
-errorRate
+errorRateK
 #################################################################
 #END
