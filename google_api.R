@@ -1,21 +1,28 @@
 # Install dependencies in Linux
 # sudo apt-get install libcurl4-openssl-dev 
 
-install = function(pkg){
-  # Si ya está instalado, no lo instala.
-  if (!require(pkg, character.only = TRUE)) {
-    install.packages(pkg, repos = "http:/cran.rstudio.com")
-    if (!require(pkg, character.only = TRUE)) stop(paste("load failure:", pkg))
+install = function(pkg)
+{
+  # If is is installed does not install packages
+  if (!require(pkg, character.only = TRUE))
+  {
+    install.packages(pkg)
+    if (!require(pkg, character.only = TRUE))
+      stop(paste("load failure:", pkg))
   }
 }
 
 install("jsonlite")
 
-fetch_data = function(preamble, list){
+fetch_data = function(preamble, list)
+{
   data = preamble
-  for(elem in list){
+  
+  for(elem in list)
+  {
     data = paste0(data, paste0(strsplit(elem, " ")[[1]], collapse = "+"), "|", collapse = "") 
   }
+  
   return(substr(data, 0, nchar(data)-1))
 }
 
@@ -33,15 +40,17 @@ get_url = function(origins, destinations, key, mode = "driving", language = "es"
   
   # Getting final format for Google API
   api_url = paste(c(base, paste0(c(origin, destination, key, mode, language), collapse = "&")), collapse = "")
-  
+ 
   return(api_url)
 }
 
-get_data = function(api_url){
+get_data = function(api_url)
+{
   return(fromJSON(api_url))
 }
 
 # To Complete
-parse_data = function(json){
-  
+parse_data = function(json)
+{
+  return(as.data.frame(json["rows"]$rows$elements))
 }
