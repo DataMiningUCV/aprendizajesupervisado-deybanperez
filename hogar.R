@@ -21,7 +21,6 @@ mydata$Distrito = NULL
 mydata$Piso = NULL
 #################################################################################
 #Removing \n in Column Direction
-
 mydata$Dirección = strsplit(as.character(mydata$Dirección), "\n")
 
 for(i in seq(1:nrow(mydata)))
@@ -32,6 +31,11 @@ for(i in seq(1:nrow(mydata)))
 ##################################################################################
 #Converting Direccion Column into factor type
 mydata$Dirección = as.character(mydata$Dirección)
+##################################################################################
+#Fixing typos in som Directions
+mydata$Dirección[11] = "Galliate"
+mydata$Dirección[33] = "Via San Roberto Bellarmino"
+mydata$Dirección[61] = "Via di Monte Verde"
 ##################################################################################
 #Adding Distance column to dataset
 mydata$Time = 0
@@ -64,11 +68,11 @@ for(i in seq(1:nrow(mydata)))
     #If is only has minutes
     if (length(aux1[[1]]) == 1)
     {
-      mydata$Distance[i] = aux1[[1]][1]
+      mydata$Time[i] = aux1[[1]][1]
     }
     else #If has hours
     {
-      mydata$Distance[i] = (as.integer(aux1[[1]][1])*60) + as.integer(aux1[[1]][2])
+      mydata$Time[i] = (as.integer(aux1[[1]][1])*60) + as.integer(aux1[[1]][2])
       
     }
   }
@@ -164,5 +168,6 @@ mydata$Termo[grepl("(termo)", mydata$Descripción)] = 1
 #######################################################################################################################
 #Filling Terrazo column (terraza)
 mydata$Terrazzo[grepl("(terrazzo)", mydata$Descripción)] = 1
+#######################################################################################################################
 
 grepl("(living)",mydata$Descripción[3])
