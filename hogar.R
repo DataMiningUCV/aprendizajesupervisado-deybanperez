@@ -43,7 +43,7 @@ mydata$Time = 0
 destino =c("Piazzale Aldo Moro")
 ##################################################################################
 #Setting API key
-api_key = "AIzaSyCJ-6caC04NXNHDjpLq0BV2C9obZINR6bo"
+api_key = "AIzaSyBgTslqWxmNPlZx9-LvmeDrGRnVq8AEXyI"
 #################################################################################
 #Cicle to fill time column
 for(i in seq(1:nrow(mydata)))
@@ -501,18 +501,17 @@ for(i in seq(1:(ncol(mydata)-1)))
       mydata$Function =mydata$Function + mydata[i]
   }
 }
-
 mydata$Function = mydata$Function / as.numeric(mydata$Precio.Mensual)
-
-max(mydata$Function)
-
-mydata$Function == 4.000053
-
-if( (1 == 1) && (2 == 2))
-  print("Hola")
-
-mydata$Function = mydata$Function + (1/mydata[1])
 ############################################################################################################################
 #Dividing datasets into boys and girls
-boys = subset.data.frame(mydata, Notas == "0" | Notas == "3")
-girls = subset.data.frame(mydata, Notas == "1" | Notas == "3")
+boys = subset.data.frame(mydata, Notas == "0" | Notas == "2")
+girls = subset.data.frame(mydata, Notas == "1" | Notas == "2")
+############################################################################################################################
+#Choosing the best place for a boy
+max(boys$Function)
+max(girls$Function)
+
+############################################################################################################################
+#Dividing datasets into boys and girls
+boys = subset.data.frame(mydata, Notas == "0" | Notas == "2")
+girls = subset.data.frame(mydata, Notas == "1" | Notas == "2")
