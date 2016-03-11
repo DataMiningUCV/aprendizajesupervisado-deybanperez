@@ -1,4 +1,12 @@
 #begin
+#######################################################################
+#Funcion para normalizar una columna de un data frame
+normalize = function(x)
+{
+  num <- x - min(x)
+  denom <- max(x) - min(x)
+  return (num/denom)
+}
 #################################################################################
 # Seleccionar google_api.R en su sistema de archivos
 source(file.choose())
@@ -177,7 +185,7 @@ mydata$Distrito = as.character(mydata$Distrito)
 mydata$Dirección = as.character(mydata$Dirección)
 #######################################################################################################################
 #Splitting rows from columns with multiple disposition
-new_row = c(as.character(mydata$Dirección[4]), as.character(mydata$Distrito[4]), as.character(mydata$Tipo.de.Inmueble[4]), "doppia", "€ 300 condominio, acqua, riscaldamento, internet inclusi", as.character(mydata$Notas[4]), as.character(mydata$Time[4]), as.character(mydata$Ingresso[4]), as.character(mydata$Soggiorno[4]), as.character(mydata$Cucina[4]), as.character(mydata$Bagno[4]), as.character(mydata$Salone[4]), as.character(mydata$Disimpegno[4]), as.character(mydata$Corridoio[4]), as.character(mydata$Internet[4]), as.character(mydata$Ripostiglio[4]), as.character(mydata$Balcone[4]), as.character(mydata$Termo[4]), as.character(mydata$Terrazzo[4]))
+new_row = c(as.character(mydata$Distrito[4]), as.character(mydata$Dirección[4]), as.character(mydata$Tipo.de.Inmueble[4]), "doppia", "€ 300 condominio, acqua, riscaldamento, internet inclusi", as.character(mydata$Notas[4]), as.character(mydata$Time[4]), as.character(mydata$Ingresso[4]), as.character(mydata$Soggiorno[4]), as.character(mydata$Cucina[4]), as.character(mydata$Bagno[4]), as.character(mydata$Salone[4]), as.character(mydata$Disimpegno[4]), as.character(mydata$Corridoio[4]), as.character(mydata$Internet[4]), as.character(mydata$Ripostiglio[4]), as.character(mydata$Balcone[4]), as.character(mydata$Termo[4]), as.character(mydata$Terrazzo[4]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[4] = "singola"
 mydata$Precio.Mensual[4] = "€ 450 condominio, acqua, riscaldamento, internet inclusi"
@@ -185,12 +193,12 @@ mydata$Precio.Mensual[4] = "€ 450 condominio, acqua, riscaldamento, internet i
 mydata$Habitaciones.Disponibles[5] = "singola"
 mydata$Precio.Mensual[5] = "€ 505"
 ########################################################################################################################
-new_row = c(as.character(mydata$Dirección[7]), as.character(mydata$Distrito[7]), as.character(mydata$Tipo.de.Inmueble[7]), "doppia", "€ 450", as.character(mydata$Notas[7]), as.character(mydata$Time[7]), as.character(mydata$Ingresso[7]), as.character(mydata$Soggiorno[7]), as.character(mydata$Cucina[7]), as.character(mydata$Bagno[7]), as.character(mydata$Salone[7]), as.character(mydata$Disimpegno[7]), as.character(mydata$Corridoio[7]), as.character(mydata$Internet[7]), as.character(mydata$Ripostiglio[7]), as.character(mydata$Balcone[7]), as.character(mydata$Termo[7]), as.character(mydata$Terrazzo[7]))
+new_row = c(as.character(mydata$Distrito[7]), as.character(mydata$Dirección[7]), as.character(mydata$Tipo.de.Inmueble[7]), "doppia", "€ 450", as.character(mydata$Notas[7]), as.character(mydata$Time[7]), as.character(mydata$Ingresso[7]), as.character(mydata$Soggiorno[7]), as.character(mydata$Cucina[7]), as.character(mydata$Bagno[7]), as.character(mydata$Salone[7]), as.character(mydata$Disimpegno[7]), as.character(mydata$Corridoio[7]), as.character(mydata$Internet[7]), as.character(mydata$Ripostiglio[7]), as.character(mydata$Balcone[7]), as.character(mydata$Termo[7]), as.character(mydata$Terrazzo[7]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[7] = "singola"
 mydata$Precio.Mensual[7] = "€ 250"
 ########################################################################################################################
-new_row = c(as.character(mydata$Dirección[10]), as.character(mydata$Distrito[10]), as.character(mydata$Tipo.de.Inmueble[10]), "doppia", "€ 350 TUTTO INCLUSO", as.character(mydata$Notas[10]), as.character(mydata$Time[10]), as.character(mydata$Ingresso[10]), as.character(mydata$Soggiorno[10]), as.character(mydata$Cucina[10]), as.character(mydata$Bagno[10]), as.character(mydata$Salone[10]), as.character(mydata$Disimpegno[10]), as.character(mydata$Corridoio[10]), as.character(mydata$Internet[10]), as.character(mydata$Ripostiglio[10]), as.character(mydata$Balcone[10]), as.character(mydata$Termo[10]), as.character(mydata$Terrazzo[10]))
+new_row = c(as.character(mydata$Distrito[10]), as.character(mydata$Dirección[10]), as.character(mydata$Tipo.de.Inmueble[10]), "doppia", "€ 350 TUTTO INCLUSO", as.character(mydata$Notas[10]), as.character(mydata$Time[10]), as.character(mydata$Ingresso[10]), as.character(mydata$Soggiorno[10]), as.character(mydata$Cucina[10]), as.character(mydata$Bagno[10]), as.character(mydata$Salone[10]), as.character(mydata$Disimpegno[10]), as.character(mydata$Corridoio[10]), as.character(mydata$Internet[10]), as.character(mydata$Ripostiglio[10]), as.character(mydata$Balcone[10]), as.character(mydata$Termo[10]), as.character(mydata$Terrazzo[10]))
 mydata$Habitaciones.Disponibles[10] = "doppia"
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[10] = "singola"
@@ -217,7 +225,7 @@ mydata$Precio.Mensual[24] = "€ 475 internet incluso"
 mydata$Habitaciones.Disponibles[26] = "singola"
 mydata$Precio.Mensual[26] = "€ 380 condominio e acqua inclusi"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[31]), as.character(mydata$Distrito[31]), as.character(mydata$Tipo.de.Inmueble[31]), "doppia", "€ 250 condominio e riscaldamento", as.character(mydata$Notas[31]), as.character(mydata$Time[31]), as.character(mydata$Ingresso[31]), as.character(mydata$Soggiorno[31]), as.character(mydata$Cucina[31]), as.character(mydata$Bagno[31]), as.character(mydata$Salone[31]), as.character(mydata$Disimpegno[31]), as.character(mydata$Corridoio[31]), as.character(mydata$Internet[31]), as.character(mydata$Ripostiglio[31]), as.character(mydata$Balcone[31]), as.character(mydata$Termo[31]), as.character(mydata$Terrazzo[31]))
+new_row = c(as.character(mydata$Distrito[31]), as.character(mydata$Dirección[31]), as.character(mydata$Tipo.de.Inmueble[31]), "doppia", "€ 250 condominio e riscaldamento", as.character(mydata$Notas[31]), as.character(mydata$Time[31]), as.character(mydata$Ingresso[31]), as.character(mydata$Soggiorno[31]), as.character(mydata$Cucina[31]), as.character(mydata$Bagno[31]), as.character(mydata$Salone[31]), as.character(mydata$Disimpegno[31]), as.character(mydata$Corridoio[31]), as.character(mydata$Internet[31]), as.character(mydata$Ripostiglio[31]), as.character(mydata$Balcone[31]), as.character(mydata$Termo[31]), as.character(mydata$Terrazzo[31]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[31] = "singola"
 mydata$Precio.Mensual[31] = "€ 450 condominio e riscaldamento"
@@ -240,7 +248,7 @@ mydata$Precio.Mensual[56] = "€ 450 condominio, acqua e riscaldamento"
 mydata$Habitaciones.Disponibles[61] = "singola"
 mydata$Precio.Mensual[61] = "€ 425 condominio, acqua e riscaldamento"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[72]), as.character(mydata$Distrito[72]), as.character(mydata$Tipo.de.Inmueble[72]), "doppia", "€ 350 TUTTO INCLUSO", as.character(mydata$Notas[72]), as.character(mydata$Time[72]), as.character(mydata$Ingresso[72]), as.character(mydata$Soggiorno[72]), as.character(mydata$Cucina[72]), as.character(mydata$Bagno[72]), as.character(mydata$Salone[72]), as.character(mydata$Disimpegno[72]), as.character(mydata$Corridoio[72]), as.character(mydata$Internet[72]), as.character(mydata$Ripostiglio[72]), as.character(mydata$Balcone[72]), as.character(mydata$Termo[72]), as.character(mydata$Terrazzo[72]))
+new_row = c(as.character(mydata$Distrito[72]), as.character(mydata$Dirección[72]), as.character(mydata$Tipo.de.Inmueble[72]), "doppia", "€ 350 TUTTO INCLUSO", as.character(mydata$Notas[72]), as.character(mydata$Time[72]), as.character(mydata$Ingresso[72]), as.character(mydata$Soggiorno[72]), as.character(mydata$Cucina[72]), as.character(mydata$Bagno[72]), as.character(mydata$Salone[72]), as.character(mydata$Disimpegno[72]), as.character(mydata$Corridoio[72]), as.character(mydata$Internet[72]), as.character(mydata$Ripostiglio[72]), as.character(mydata$Balcone[72]), as.character(mydata$Termo[72]), as.character(mydata$Terrazzo[72]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[72] = "singola"
 mydata$Precio.Mensual[72] = "€ 450 TUTTO INCLUSO"
@@ -248,27 +256,27 @@ mydata$Precio.Mensual[72] = "€ 450 TUTTO INCLUSO"
 mydata$Habitaciones.Disponibles[74] = "singola"
 mydata$Precio.Mensual[74] = "€ 450 Spese escluse"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[76]), as.character(mydata$Distrito[76]), as.character(mydata$Tipo.de.Inmueble[76]), "singola", "€ 425 condominio, acqua e riscaldamento inclusi", as.character(mydata$Notas[76]), as.character(mydata$Time[76]), as.character(mydata$Ingresso[76]), as.character(mydata$Soggiorno[76]), as.character(mydata$Cucina[76]), as.character(mydata$Bagno[76]), as.character(mydata$Salone[76]), as.character(mydata$Disimpegno[76]), as.character(mydata$Corridoio[76]), as.character(mydata$Internet[76]), as.character(mydata$Ripostiglio[76]), as.character(mydata$Balcone[76]), as.character(mydata$Termo[76]), as.character(mydata$Terrazzo[76]))
+new_row = c(as.character(mydata$Distrito[76]), as.character(mydata$Dirección[76]), as.character(mydata$Tipo.de.Inmueble[76]), "singola", "€ 425 condominio, acqua e riscaldamento inclusi", as.character(mydata$Notas[76]), as.character(mydata$Time[76]), as.character(mydata$Ingresso[76]), as.character(mydata$Soggiorno[76]), as.character(mydata$Cucina[76]), as.character(mydata$Bagno[76]), as.character(mydata$Salone[76]), as.character(mydata$Disimpegno[76]), as.character(mydata$Corridoio[76]), as.character(mydata$Internet[76]), as.character(mydata$Ripostiglio[76]), as.character(mydata$Balcone[76]), as.character(mydata$Termo[76]), as.character(mydata$Terrazzo[76]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[76] = "intero appartamento"
 mydata$Precio.Mensual[76] = "€ 850 condominio, acqua e riscaldamento inclusi"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[77]), as.character(mydata$Distrito[77]), as.character(mydata$Tipo.de.Inmueble[77]), "doppia", "€ 350 condominio, acqua, riscaldamento e tassa rifiuti inclusi", as.character(mydata$Notas[77]), as.character(mydata$Time[77]), as.character(mydata$Ingresso[77]), as.character(mydata$Soggiorno[77]), as.character(mydata$Cucina[77]), as.character(mydata$Bagno[77]), as.character(mydata$Salone[77]), as.character(mydata$Disimpegno[77]), as.character(mydata$Corridoio[77]), as.character(mydata$Internet[77]), as.character(mydata$Ripostiglio[77]), as.character(mydata$Balcone[77]), as.character(mydata$Termo[77]), as.character(mydata$Terrazzo[77]))
+new_row = c(as.character(mydata$Distrito[77]), as.character(mydata$Dirección[77]), as.character(mydata$Tipo.de.Inmueble[77]), "doppia", "€ 350 condominio, acqua, riscaldamento e tassa rifiuti inclusi", as.character(mydata$Notas[77]), as.character(mydata$Time[77]), as.character(mydata$Ingresso[77]), as.character(mydata$Soggiorno[77]), as.character(mydata$Cucina[77]), as.character(mydata$Bagno[77]), as.character(mydata$Salone[77]), as.character(mydata$Disimpegno[77]), as.character(mydata$Corridoio[77]), as.character(mydata$Internet[77]), as.character(mydata$Ripostiglio[77]), as.character(mydata$Balcone[77]), as.character(mydata$Termo[77]), as.character(mydata$Terrazzo[77]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[77] = "singola"
 mydata$Precio.Mensual[77] = "€ 550 condominio, acqua, riscaldamento e tassa rifiuti inclusi"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[81]), as.character(mydata$Distrito[81]), as.character(mydata$Tipo.de.Inmueble[81]), "doppia", "€ 325 TUTTO INCLUSO", as.character(mydata$Notas[81]), as.character(mydata$Time[81]), as.character(mydata$Ingresso[81]), as.character(mydata$Soggiorno[81]), as.character(mydata$Cucina[81]), as.character(mydata$Bagno[81]), as.character(mydata$Salone[81]), as.character(mydata$Disimpegno[81]), as.character(mydata$Corridoio[81]), as.character(mydata$Internet[81]), as.character(mydata$Ripostiglio[81]), as.character(mydata$Balcone[81]), as.character(mydata$Termo[81]), as.character(mydata$Terrazzo[81]))
+new_row = c(as.character(mydata$Distrito[81]), as.character(mydata$Dirección[81]), as.character(mydata$Tipo.de.Inmueble[81]), "doppia", "€ 325 TUTTO INCLUSO", as.character(mydata$Notas[81]), as.character(mydata$Time[81]), as.character(mydata$Ingresso[81]), as.character(mydata$Soggiorno[81]), as.character(mydata$Cucina[81]), as.character(mydata$Bagno[81]), as.character(mydata$Salone[81]), as.character(mydata$Disimpegno[81]), as.character(mydata$Corridoio[81]), as.character(mydata$Internet[81]), as.character(mydata$Ripostiglio[81]), as.character(mydata$Balcone[81]), as.character(mydata$Termo[81]), as.character(mydata$Terrazzo[81]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[81] = "singola"
 mydata$Precio.Mensual[81] = "€ 550 TUTTO INCLUSO"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[84]), as.character(mydata$Distrito[84]), as.character(mydata$Tipo.de.Inmueble[84]), "doppia", "€ 375 condominio, acqua, riscaldamento tassa rifiuti inclusa", as.character(mydata$Notas[84]), as.character(mydata$Time[84]), as.character(mydata$Ingresso[84]), as.character(mydata$Soggiorno[84]), as.character(mydata$Cucina[84]), as.character(mydata$Bagno[84]), as.character(mydata$Salone[84]), as.character(mydata$Disimpegno[84]), as.character(mydata$Corridoio[84]), as.character(mydata$Internet[84]), as.character(mydata$Ripostiglio[84]), as.character(mydata$Balcone[84]), as.character(mydata$Termo[84]), as.character(mydata$Terrazzo[84]))
+new_row = c(as.character(mydata$Distrito[84]), as.character(mydata$Dirección[84]), as.character(mydata$Tipo.de.Inmueble[84]), "doppia", "€ 375 condominio, acqua, riscaldamento tassa rifiuti inclusa", as.character(mydata$Notas[84]), as.character(mydata$Time[84]), as.character(mydata$Ingresso[84]), as.character(mydata$Soggiorno[84]), as.character(mydata$Cucina[84]), as.character(mydata$Bagno[84]), as.character(mydata$Salone[84]), as.character(mydata$Disimpegno[84]), as.character(mydata$Corridoio[84]), as.character(mydata$Internet[84]), as.character(mydata$Ripostiglio[84]), as.character(mydata$Balcone[84]), as.character(mydata$Termo[84]), as.character(mydata$Terrazzo[84]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[84] = "singola"
 mydata$Precio.Mensual[84] = "€ 475 condominio, acqua, riscaldamento tassa rifiuti inclusa"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[85]), as.character(mydata$Distrito[85]), as.character(mydata$Tipo.de.Inmueble[85]), "doppia", "€ 300 spese escluse", as.character(mydata$Notas[85]), as.character(mydata$Time[85]), as.character(mydata$Ingresso[85]), as.character(mydata$Soggiorno[85]), as.character(mydata$Cucina[85]), as.character(mydata$Bagno[85]), as.character(mydata$Salone[85]), as.character(mydata$Disimpegno[85]), as.character(mydata$Corridoio[85]), as.character(mydata$Internet[85]), as.character(mydata$Ripostiglio[85]), as.character(mydata$Balcone[85]), as.character(mydata$Termo[85]), as.character(mydata$Terrazzo[85]))
+new_row = c(as.character(mydata$Distrito[85]), as.character(mydata$Dirección[85]), as.character(mydata$Tipo.de.Inmueble[85]), "doppia", "€ 300 spese escluse", as.character(mydata$Notas[85]), as.character(mydata$Time[85]), as.character(mydata$Ingresso[85]), as.character(mydata$Soggiorno[85]), as.character(mydata$Cucina[85]), as.character(mydata$Bagno[85]), as.character(mydata$Salone[85]), as.character(mydata$Disimpegno[85]), as.character(mydata$Corridoio[85]), as.character(mydata$Internet[85]), as.character(mydata$Ripostiglio[85]), as.character(mydata$Balcone[85]), as.character(mydata$Termo[85]), as.character(mydata$Terrazzo[85]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[85] = "singola"
 mydata$Precio.Mensual[85] = "€ 450 spese escluse"
@@ -276,7 +284,7 @@ mydata$Precio.Mensual[85] = "€ 450 spese escluse"
 mydata$Habitaciones.Disponibles[87] = "singola"
 mydata$Precio.Mensual[87] = "€ 450 condominio, acqua, riscaldamento, tassa rifiuti, internet inclusi"
 #######################################################################################################################
-new_row = c(as.character(mydata$Dirección[88]), as.character(mydata$Distrito[88]), as.character(mydata$Tipo.de.Inmueble[88]), "doppia", "€ 300 condominio, acqua, riscaldamento, tassa rifiuti inclusi", as.character(mydata$Notas[88]), as.character(mydata$Time[88]), as.character(mydata$Ingresso[88]), as.character(mydata$Soggiorno[88]), as.character(mydata$Cucina[88]), as.character(mydata$Bagno[88]), as.character(mydata$Salone[88]), as.character(mydata$Disimpegno[88]), as.character(mydata$Corridoio[88]), as.character(mydata$Internet[88]), as.character(mydata$Ripostiglio[88]), as.character(mydata$Balcone[88]), as.character(mydata$Termo[88]), as.character(mydata$Terrazzo[88]))
+new_row = c(as.character(mydata$Distrito[88]), as.character(mydata$Dirección[88]), as.character(mydata$Tipo.de.Inmueble[88]), "doppia", "€ 300 condominio, acqua, riscaldamento, tassa rifiuti inclusi", as.character(mydata$Notas[88]), as.character(mydata$Time[88]), as.character(mydata$Ingresso[88]), as.character(mydata$Soggiorno[88]), as.character(mydata$Cucina[88]), as.character(mydata$Bagno[88]), as.character(mydata$Salone[88]), as.character(mydata$Disimpegno[88]), as.character(mydata$Corridoio[88]), as.character(mydata$Internet[88]), as.character(mydata$Ripostiglio[88]), as.character(mydata$Balcone[88]), as.character(mydata$Termo[88]), as.character(mydata$Terrazzo[88]))
 mydata <- rbind(mydata, new_row)
 mydata$Habitaciones.Disponibles[88] = "singola"
 mydata$Precio.Mensual[88] = "€ 450 condominio, acqua, riscaldamento, tassa rifiuti inclusi"
@@ -507,11 +515,57 @@ mydata$Function = mydata$Function / as.numeric(mydata$Precio.Mensual)
 boys = subset.data.frame(mydata, Notas == "0" | Notas == "2")
 girls = subset.data.frame(mydata, Notas == "1" | Notas == "2")
 ############################################################################################################################
-#Choosing the best place for a boy
-max(boys$Function)
-max(girls$Function)
-
+#Choosing the best place for boys
+max_boys = max(boys$Function)
+boys$Dirección[which.max(as.numeric(unlist(boys$Function)))]
+#Choosing the best place for girls
+max_girls = max(girls$Function)
+girls$Dirección[which.max(as.numeric(unlist(girls$Function)))]
 ############################################################################################################################
-#Dividing datasets into boys and girls
-boys = subset.data.frame(mydata, Notas == "0" | Notas == "2")
-girls = subset.data.frame(mydata, Notas == "1" | Notas == "2")
+#Linear Regression Section for Boys
+regression_boys = boys
+regression_boys$Precio.Mensual = NULL
+regression_boys$Dirección = NULL
+regression_boys$Function = NULL
+regression_boys$Time = NULL
+############################################################################################################################
+#Normalizing columns
+for(i in seq(1:ncol(regression_boys)))
+{
+  regression_boys[i] = as.numeric(unlist(regression_boys[i]))
+}
+regression_boys = as.data.frame(lapply(regression_boys[1:ncol(regression_boys)], normalize))
+#Adding column to be predicetd
+regression_boys$Precio.Mensual = boys$Precio.Mensual
+regression_boys$Precio.Mensual = as.numeric(regression_boys$Precio.Mensual)
+#Splitting dataset into training and testing
+sub = sample(x = nrow(regression_boys), size = floor(nrow(regression_boys) * 0.8), replace = F)
+training_regression_boys = regression_boys[sub, ]
+testing_regression_boys = regression_boys[-sub, ]
+model_boys = lm(training_regression_boys$Precio.Mensual ~ ., training_regression_boys)
+testing_regression_boys$Estimado = predict(model_boys, newdata = testing_regression_boys)
+############################################################################################################################
+#Linear Regression Section for girls
+regression_girls = girls
+regression_girls$Precio.Mensual = NULL
+regression_girls$Dirección = NULL
+regression_girls$Function = NULL
+regression_girls$Time = NULL
+############################################################################################################################
+#Normalizing columns
+for(i in seq(1:ncol(regression_girls)))
+{
+  regression_girls[i] = as.numeric(unlist(regression_girls[i]))
+}
+regression_girls = as.data.frame(lapply(regression_girls[1:ncol(regression_girls)], normalize))
+#Adding column to be predicetd
+regression_girls$Precio.Mensual = girls$Precio.Mensual
+regression_girls$Precio.Mensual = as.numeric(regression_girls$Precio.Mensual)
+#Splitting dataset into training and testing
+sub = sample(x = nrow(regression_girls), size = floor(nrow(regression_girls) * 0.8), replace = F)
+training_regression_girls = regression_girls[sub, ]
+testing_regression_girls = regression_girls[-sub, ]
+model_girls = lm(training_regression_girls$Precio.Mensual ~ ., training_regression_girls)
+testing_regression_girls$Estimado = predict(model_girls, newdata = testing_regression_girls)
+
+
