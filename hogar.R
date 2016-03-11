@@ -179,6 +179,7 @@ mydata$Terrazzo[grepl("(terrazzo)", mydata$Descripción)] = 1
 #Deleting columns that will not use again
 mydata$Descripción = NULL
 #######################################################################################################################
+#Converting types of features to a easiest data type (character)
 mydata$Habitaciones.Disponibles = as.character(mydata$Habitaciones.Disponibles)
 mydata$Precio.Mensual= as.character(mydata$Precio.Mensual)
 mydata$Distrito = as.character(mydata$Distrito)
