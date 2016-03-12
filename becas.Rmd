@@ -2,7 +2,7 @@
 title: "Becas Crema 2.0"
 author: "Deyban Pérez"
 date: "March 5, 2016"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}

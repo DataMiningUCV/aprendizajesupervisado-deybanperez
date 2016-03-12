@@ -94,7 +94,6 @@ mydata$Notas[39] = as.character(2)
 mydata$Notas = as.factor(mydata$Notas)
 #####################################################################################################################
 #Numerizing column Tipo.de.Inmueble, 0 fo Apartments, 1 for mini Apartments, 2 for Monolocale
-levels(mydata$Tipo.de.Inmueble)
 mydata$Tipo.de.Inmueble = as.character(mydata$Tipo.de.Inmueble)
 mydata$Tipo.de.Inmueble[mydata$Tipo.de.Inmueble == "Apartamento"] = as.character(0)
 mydata$Tipo.de.Inmueble[mydata$Tipo.de.Inmueble == "Apparrtamento"] = as.character(0)
@@ -543,8 +542,14 @@ regression_boys$Precio.Mensual = as.numeric(regression_boys$Precio.Mensual)
 sub = sample(x = nrow(regression_boys), size = floor(nrow(regression_boys) * 0.8), replace = F)
 training_regression_boys = regression_boys[sub, ]
 testing_regression_boys = regression_boys[-sub, ]
+# Applying Regression
 model_boys = lm(training_regression_boys$Precio.Mensual ~ ., training_regression_boys)
+# Testing the model
 testing_regression_boys$Estimado = predict(model_boys, newdata = testing_regression_boys)
+# Showing resulst
+result_boys = as.data.frame(testing_regression_boys$Estimado)
+result_boys$Real =  testing_regression_boys$Precio.Mensual
+result_boys
 ############################################################################################################################
 #Linear Regression Section for girls
 regression_girls = girls
@@ -563,10 +568,16 @@ regression_girls = as.data.frame(lapply(regression_girls[1:ncol(regression_girls
 regression_girls$Precio.Mensual = girls$Precio.Mensual
 regression_girls$Precio.Mensual = as.numeric(regression_girls$Precio.Mensual)
 #Splitting dataset into training and testing
+set.seed(777)
 sub = sample(x = nrow(regression_girls), size = floor(nrow(regression_girls) * 0.8), replace = F)
 training_regression_girls = regression_girls[sub, ]
 testing_regression_girls = regression_girls[-sub, ]
+# Applying the model
 model_girls = lm(training_regression_girls$Precio.Mensual ~ ., training_regression_girls)
+# Testing the model
 testing_regression_girls$Estimado = predict(model_girls, newdata = testing_regression_girls)
-
+# Showing results
+result_girls = as.data.frame(testing_regression_girls$Estimado)
+result_girls$Real =  testing_regression_boys$girls.Mensual
+result_girls
 

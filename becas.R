@@ -1,7 +1,7 @@
 # Begin
 # Installing dependecies in Linux: 
   # sudo apt-get install libgtk2.0-dev, necessary for fancyplot
-  #apt-get install r-cran-rjava
+  # apt-get install r-cran-rjava
 
 #Functions definitions
 ########################################################################

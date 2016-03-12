@@ -2,7 +2,7 @@
 title: "Buscando un Hogar"
 author: "Deyban Pérez"
 date: "March 11, 2016"
-output: html_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -35,7 +35,7 @@ normalize = function(x)
 }
 #################################################################################
 # Seleccionar google_api.R en su sistema de archivos
-source(file.choose())
+source("google_api.R")
 #################################################################################
 # Installing required packages
 install("curl")
@@ -77,7 +77,7 @@ mydata$Time = 0
 destino =c("Piazzale Aldo Moro")
 ##################################################################################
 #Setting API key
-api_key = "AIzaSyBgTslqWxmNPlZx9-LvmeDrGRnVq8AEXyI"
+api_key = "AIzaSyCJ-6caC04NXNHDjpLq0BV2C9obZINR6bo"
 #################################################################################
 #Cicle to fill time column
 for(i in seq(1:nrow(mydata)))
@@ -574,6 +574,179 @@ for(i in seq(1:(ncol(mydata)-1)))
 mydata$Function = mydata$Function / as.numeric(mydata$Precio.Mensual)
 
 ```
+
+## Dividiendo los Conjuntos de Datos en Niños y Niñas Para Hacer un Modelo Independiente
+Se pidió que se hiciera un modelo independiente para niños y niñas, por lo tanto se separó el dataset original en dos.
+
+
+```{r}
+############################################################################################################################
+#Dividing datasets into boys and girls
+boys = subset.data.frame(mydata, Notas == "0" | Notas == "2")
+girls = subset.data.frame(mydata, Notas == "1" | Notas == "2")
+############################################################################################################################
+
+```
+## Eligiendo la Mejor Vivienda Para Niños
+Se eligió aquella dirección que tuviese un mayor valor en la función creada anteriormente
+
+```{r}
+#Choosing the best place for boys
+max_boys = max(boys$Function)
+boys$Dirección[which.max(as.numeric(unlist(boys$Function)))]
+
+```
+
+## Eligiendo la Mejor Vivienda Para Niñas
+Se eligió aquella dirección que tiviese un mayor valor en la función creada anteriormente
+
+```{r}
+#Choosing the best place for girls
+max_girls = max(girls$Function)
+girls$Dirección[which.max(as.numeric(unlist(girls$Function)))]
+
+```
+
+## Regresión Lineal
+Se usó regresión lineal para estimar el precio de una vivienda basándose en sus características.
+
+### Modelo Para Niños
+
+#### Creando el Dataframe
+Se creó el dataframe y se eiliminaron las columnas que no usaremos para predecir o que no son numéricas y no s epueden normalizar
+
+```{r}
+#Linear Regression Section for Boys
+regression_boys = boys
+regression_boys$Precio.Mensual = NULL
+regression_boys$Dirección = NULL
+regression_boys$Function = NULL
+regression_boys$Time = NULL
+############################################################################################################################
+#Normalizing columns
+for(i in seq(1:ncol(regression_boys)))
+{
+  regression_boys[i] = as.numeric(unlist(regression_boys[i]))
+}
+regression_boys = as.data.frame(lapply(regression_boys[1:ncol(regression_boys)], normalize))
+#Adding column to be predicetd
+regression_boys$Precio.Mensual = boys$Precio.Mensual
+regression_boys$Precio.Mensual = as.numeric(regression_boys$Precio.Mensual)
+
+```
+#### Dividiendo los Conjuntos en Training y Testing
+Se realizó un sampling colocando el 80% de la muestra en el training y el restante en el testing.
+
+```{r}
+
+#Splitting dataset into training and testing
+set.seed(777)
+sub = sample(x = nrow(regression_boys), size = floor(nrow(regression_boys) * 0.8), replace = F)
+training_regression_boys = regression_boys[sub, ]
+testing_regression_boys = regression_boys[-sub, ]
+
+```
+#### Aplicando la Regresión Lineal
+Predeciremos el precio basándonos en las demás características del inmueble.
+
+```{r}
+# Applying Regression
+model_boys = lm(training_regression_boys$Precio.Mensual ~ ., training_regression_boys)
+```
+
+#### Probando el Modelo
+Se prueba el modelo con el training.
+
+```{r}
+# Testing the model
+testing_regression_boys$Estimado = predict(model_boys, newdata = testing_regression_boys)
+
+```
+#### Mostrando los resultados
+Los resultados se pueden interpretar de la siguiente manera:
+
+1. Si las casas tienen precios similares, entonces el precio está proporcional a suu valor.
+
+2. Si el valor real es mayor es mayor a la prediccón, entonces esa casa está sobrevalorada.
+
+3. Si el valor real es menor a la predicción, entonces es una beuna opción ofertar por esa casa.
+
+```{r}
+# Showing reslst
+result_boys = as.data.frame(testing_regression_boys$Estimado)
+result_boys$Real =  testing_regression_boys$Precio.Mensual
+result_boys
+```
+### Modelo para niñas
+
+#### Creando el Dataframe
+Se creó el dataframe y se eiliminaron las columnas que no usaremos para predecir o que no son numéricas y no s epueden normalizar.
+
+```{r}
+#Linear Regression Section for girls
+regression_girls = girls
+regression_girls$Precio.Mensual = NULL
+regression_girls$Dirección = NULL
+regression_girls$Function = NULL
+regression_girls$Time = NULL
+############################################################################################################################
+#Normalizing columns
+for(i in seq(1:ncol(regression_girls)))
+{
+  regression_girls[i] = as.numeric(unlist(regression_girls[i]))
+}
+regression_girls = as.data.frame(lapply(regression_girls[1:ncol(regression_girls)], normalize))
+#Adding column to be predicetd
+regression_girls$Precio.Mensual = girls$Precio.Mensual
+regression_girls$Precio.Mensual = as.numeric(regression_girls$Precio.Mensual)
+```
+
+#### Dividiendo los Conjuntos en Training y Testing
+Se realizó un sampling colocando el 80% de la muestra en el training y el restante en el testing.
+
+```{r}
+#Splitting dataset into training and testing
+set.seed(777)
+sub = sample(x = nrow(regression_girls), size = floor(nrow(regression_girls) * 0.8), replace = F)
+training_regression_girls = regression_girls[sub, ]
+testing_regression_girls = regression_girls[-sub, ]
+```
+
+#### Aplicando la Regresión Lineal
+Predeciremos el precio basándonos en las demás características del inmueble.
+
+```{r}
+# Applying the model
+model_girls = lm(training_regression_girls$Precio.Mensual ~ ., training_regression_girls)
+
+```
+
+#### Probando el Modelo
+Se prueba el modelo con el training.
+
+```{r}
+# Testing the model
+testing_regression_girls$Estimado = predict(model_girls, newdata = testing_regression_girls)
+```
+
+#### Mostrando los resultados
+Los resultados se pueden interpretar de la siguiente manera:
+
+1. Si las casas tienen precios similares, entonces el precio está proporcional a suu valor.
+
+2. Si el valor real es mayor es mayor a la prediccón, entonces esa casa está sobrevalorada.
+
+3. Si el valor real es menor a la predicción, entonces es una beuna opción ofertar por esa casa.
+
+```{r}
+# Showing results
+result_girls = as.data.frame(testing_regression_girls$Estimado)
+result_girls$Real =  testing_regression_girls$Precio.Mensual
+result_girls
+```
+
+
+
 
 
 
